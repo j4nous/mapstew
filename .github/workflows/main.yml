@@ -1,0 +1,65 @@
+name: Update PBF file and tiles
+
+on:
+  schedule:
+    - cron: '20 * * * *'
+  push:
+    tags: 
+      - update.*
+
+jobs:
+  generate-tiles:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/typebrook/mapstew:a818597.2
+      credentials:
+        username: typebrook
+        password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Load environment variables
+        run: cat .env >>$GITHUB_ENV && ls -alh
+
+      - name: Get target PBF file
+        env:
+          REPO: ${{ github.repository }}
+          TOKEN_DOWNLOAD_ARTIFACT: ${{ secrets.TOKEN_DOWNLOAD_ARTIFACT }}
+        run: scripts/get-pbf-file.sh
+      
+      - name: Generate Tiles
+        run: >
+          tilemaker --input ${{ env.TARGET }} --output tiles/
+          --config  ${{ env.TILEMAKER_CONFIG }}
+          --process ${{ env.TILEMAKER_PROCESS }};
+          osmconvert ${{ env.TARGET }} --out-timestamp | 
+          TZ=${{ env.TZ }} xargs date --iso-8601=minutes -d >tiles/timestamp
+      
+      - name: Apply config about deployment
+        run: > 
+          jq '.tiles = ["<URL_PREFIX>/tiles/{z}/{x}/{y}.pbf"]' tiles/metadata.json >tiles/metadata.json.bak
+          && mv tiles/metadata.json.bak tiles/metadata.json;
+          ls *.html tiles/metadata.json styles/* | xargs sed -i "s#<URL_PREFIX>#${{ env.URL_PREFIX }}#g"
+          && git diff HEAD
+      - name: Commit newly-generated tiles
+        run: >
+          git config --local user.email "typebrook@gmail.com";
+          git config --local user.name "typebrook";
+          git branch gh-pages
+          && git checkout gh-pages
+          && { git add . --verbose | grep -v tiles/ || true; }
+          && git commit -m 'update' >/dev/null
+          && git push --force --set-upstream origin gh-pages
+      - name: Upload updated PBF file as artifact for next workflow run
+        uses: actions/upload-artifact@v2
+        with:
+          path: ${{ github.workspace }}/${{ env.TARGET }}
+
+      #- run: find tiles/ -name '*.pbf' >tiles.list
+      #- name: Make list of tiles
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    name: tiles.list
+      #    path: ${{ github.workspace }}/tiles.list
