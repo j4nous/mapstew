@@ -83,7 +83,7 @@ fi
 # Get OSM PBF file from the given URL
 if [[ ! -e $TARGET ]]; then
   echo Ready to download osm.pbf file from remote
-  curl --verbose -LO $OSM_DOWNLOAD_URL --output-dir $DIR
+  curl --verbose -LO $OSM_DOWNLOAD_URL > $DIR/taiwan-latest.o5m
   osm_file=$DIR/${OSM_DOWNLOAD_URL##*/}
 
   update_pbf_file $osm_file
