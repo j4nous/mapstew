@@ -2,7 +2,7 @@ name: Update PBF file and tiles
 
 on:
   schedule:
-    - cron: '20 * * * *'
+    - cron: '30 * * * *'
   push:
     tags: 
       - update.*
