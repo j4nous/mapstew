@@ -14,7 +14,7 @@ jobs:
       image: ghcr.io/j4nous/mapstew:latest
       credentials:
          username: ${{ github.actor }}
-         password: ${{ secrets.github_token }}
+         password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
