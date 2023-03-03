@@ -31,3 +31,4 @@ With steps above, the static tile resource `http://typebrook.github.io/mapstew/t
 
 ## Limitation
 1. The runner of Github workflow has limited computing power, so generate tiles worldwide houly is impossible. But for area of Taiwan, it could be done in 10 minutes.
+ 
