@@ -26,7 +26,7 @@ jobs:
       - name: Get target PBF file
         env:
           REPO: ${{ github.repository }}
-          TOKEN_DOWNLOAD_ARTIFACT: ${{ secrets.TOKEN_DOWNLOAD_ARTIFACT }}
+          TOKEN_DOWNLOAD_ARTIFACT: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
         run: scripts/get-pbf-file.sh
       
       - name: Generate Tiles
