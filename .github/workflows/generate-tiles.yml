@@ -11,7 +11,7 @@ jobs:
   generate-tiles:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/j4nous/mapstew:a818597.2
+      image: 'Dockerfile'
       credentials:
          username: ${{ github.actor }}
          password: ${{ secrets.github_token }}
