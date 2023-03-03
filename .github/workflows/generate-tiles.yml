@@ -2,7 +2,7 @@ name: Update PBF file and tiles
 
 on:
   schedule:
-    - cron: '* */10 * * *'
+    - cron: '* */6 * * *'
   push:
     tags: 
       - update.*
@@ -11,7 +11,7 @@ jobs:
   generate-tiles:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/typebrook/mapstew:a818597.2
+      image: ghcr.io/j4nous/mapstew:a818597.2
       credentials:
         username: typebrook
         password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
@@ -46,8 +46,8 @@ jobs:
 
       - name: Commit newly-generated tiles
         run: >
-          git config --local user.email "typebrook@gmail.com";
-          git config --local user.name "typebrook";
+          git config --local user.email "j4.nous@gmail.com";
+          git config --local user.name "j4nous";
           git branch gh-pages
           && git checkout gh-pages
           && { git add . --verbose | grep -v tiles/ || true; }
