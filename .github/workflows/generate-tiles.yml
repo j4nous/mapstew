@@ -2,7 +2,7 @@ name: Update PBF file and tiles
 
 on:
   schedule:
-    - cron: '* */6 * * *'
+    - cron: '*/6 * * * *'
   push:
     tags: 
       - update.*
@@ -11,10 +11,10 @@ jobs:
   generate-tiles:
     runs-on: ubuntu-latest
     container:
-      image: 'Dockerfile'
+      image: ghcr.io/j4nous/mapstew:latest
       credentials:
          username: ${{ github.actor }}
-         password: ${{ secrets.github_token }}
+         password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -43,7 +43,6 @@ jobs:
           && mv tiles/metadata.json.bak tiles/metadata.json;
           ls *.html tiles/metadata.json styles/* | xargs sed -i "s#<URL_PREFIX>#${{ env.URL_PREFIX }}#g"
           && git diff HEAD
-
       - name: Commit newly-generated tiles
         run: >
           git config --local user.email "j4.nous@gmail.com";
@@ -53,7 +52,6 @@ jobs:
           && { git add . --verbose | grep -v tiles/ || true; }
           && git commit -m 'update' >/dev/null
           && git push --force --set-upstream origin gh-pages
-
       - name: Upload updated PBF file as artifact for next workflow run
         uses: actions/upload-artifact@v2
         with:
