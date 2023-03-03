@@ -2,7 +2,7 @@ name: Update PBF file and tiles
 
 on:
   schedule:
-    - cron: '* */6 * * *'
+    - cron: '*/6 * * * *'
   push:
     tags: 
       - update.*
@@ -11,7 +11,7 @@ jobs:
   generate-tiles:
     runs-on: ubuntu-latest
     container:
-      image: 'Dockerfile'
+      image: ghcr.io/j4nous/mapstew:latest
       credentials:
          username: ${{ github.actor }}
          password: ${{ secrets.github_token }}
