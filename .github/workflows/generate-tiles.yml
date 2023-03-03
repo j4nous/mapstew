@@ -13,8 +13,8 @@ jobs:
     container:
       image: ghcr.io/j4nous/mapstew:a818597.2
       credentials:
-        username: j4nous
-        password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
+         username: ${{ github.actor }}
+         password: ${{ secrets.github_token }}
     steps:
       - uses: actions/checkout@v2
         with:
