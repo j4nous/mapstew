@@ -84,9 +84,10 @@ fi
 if [[ ! -e $TARGET ]]; then
   echo Ready to download osm.pbf file from remote
   curl --verbose -LO $OSM_DOWNLOAD_URL > $DIR/taiwan-latest.o5m
-  osm_file=$DIR/${OSM_DOWNLOAD_URL##*/}
+  osm_file=$DIR/taiwan-latest.o5m
 
   update_pbf_file $osm_file
 fi
 
-[[ -e $TARGET ]] && echo osm.pbf file $TARGET is here && exit 0
+[[ -e $
+]] && echo osm.pbf file $TARGET is here && exit 0
