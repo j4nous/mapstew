@@ -13,7 +13,7 @@ jobs:
     container:
       image: ghcr.io/j4nous/mapstew:a818597.2
       credentials:
-        username: typebrook
+        username: j4nous
         password: ${{ secrets.DOCKER_CONTAINER_REGISTRY_TOKEN }}
     steps:
       - uses: actions/checkout@v2
