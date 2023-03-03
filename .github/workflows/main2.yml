@@ -10,6 +10,8 @@
 name: Create and publish a Docker image3
 
 on:
+  schedule:
+    - cron: '*/6 * * * *'
   push:
     branches: ['release']
 
